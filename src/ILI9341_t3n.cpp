@@ -66,7 +66,7 @@
 #ifdef ENABLE_ILI9341_FRAMEBUFFER
 #define CBALLOC (ILI9341_TFTHEIGHT * ILI9341_TFTWIDTH * 2)
 #define COUNT_WORDS_WRITE                                                      \
-  ((ILI9341_TFTHEIGHT * ILI9341_TFTWIDTH) /                                    \
+  ((160 * 144) /                                                               \
    SCREEN_DMA_NUM_SETTINGS) // Note I know the divide will give whole number
 
 #if defined(__MK66FX1M0__)
@@ -795,7 +795,9 @@ bool ILI9341_t3n::updateScreenAsync(
   digitalWriteFast(DEBUG_PIN_4, !digitalReadFast(DEBUG_PIN_4));
 #endif
 
-  setAddr(0, 0, _width - 1, _height - 1);
+  //Make the Gameboy screen get drawn in the centre and
+  //only DMA the Gameboy Screen (Not the whole screen)
+  setAddr((320 - 160) / 2, 33, (320 - 160) / 2 + 160 - 1, 33 + 144 - 1);
   writecommand_last(ILI9341_RAMWR);
 
   // Update TCR to 16 bit mode. and output the first entry.
